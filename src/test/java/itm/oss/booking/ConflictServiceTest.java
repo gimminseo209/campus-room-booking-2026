@@ -115,4 +115,16 @@ class ConflictServiceTest {
         assertFalse(ConflictService.hasConflict(List.of(), proposed),
                 "With no existing bookings there is nothing to conflict with");
     }
+    
+    @Test
+    @DisplayName("Skips a CANCELLED booking and still finds a later overlapping ACTIVE booking")
+    void cancelledBookingFirstThenOverlappingActiveIsConflict() {
+        Booking cancelled = booking(1, ROOM_A, "10:00", "11:00", BookingStatus.CANCELLED);
+        Booking active = booking(2, ROOM_A, "10:30", "11:30", BookingStatus.ACTIVE);
+        Booking proposed = booking(3, ROOM_A, "10:45", "11:15", BookingStatus.ACTIVE);
+
+        assertTrue(ConflictService.hasConflict(List.of(cancelled, active), proposed),
+                "A CANCELLED booking must be skipped without ending the search, "
+                        + "so the later overlapping ACTIVE booking is still found");
+    }
 }
