@@ -11,7 +11,8 @@ public final class ConflictService {
      * Issue 2.
      * Returns true if any ACTIVE existing booking uses the same room as the
      * proposed booking and overlaps it in time. Bookings that only touch at
-     * a boundary do not conflict.
+     * a boundary do not conflict. 
+     * The status of the proposed booking is not checked; only existing bookings' status matters.
      */
     public static boolean hasConflict(
             List<Booking> existing,
