@@ -98,6 +98,16 @@ class ConflictServiceTest {
     }
 
     @Test
+    @DisplayName("Room IDs differing only in letter case are different rooms")
+    void roomIdDifferingOnlyInCaseIsNotConflict() {
+        Booking existing = booking(1, "R101", "10:00", "11:00", BookingStatus.ACTIVE);
+        Booking proposed = booking(2, "r101", "10:30", "11:30", BookingStatus.ACTIVE);
+
+        assertFalse(ConflictService.hasConflict(List.of(existing), proposed),
+                "Room IDs use exact matching, so R101 and r101 should not conflict");
+    }
+
+    @Test
     @DisplayName("Overlapping CANCELLED booking is not a conflict")
     void cancelledBookingIsNotConflict() {
         Booking existing = booking(1, ROOM_A, "10:00", "11:00", BookingStatus.CANCELLED);
